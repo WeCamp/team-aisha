@@ -9,6 +9,7 @@ services:
     hostname: react
     volumes:
       - ./widget:/var/www
+      - /var/www/node_modules
 
   website:
     image: nginx:alpine
