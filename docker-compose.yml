@@ -7,6 +7,7 @@ services:
     user: node
     container_name: react
     hostname: react
+    tty: true
     volumes:
       - ./widget:/var/www
       - /var/www/node_modules
