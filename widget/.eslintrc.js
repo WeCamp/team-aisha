@@ -1,5 +1,6 @@
 module.exports = {
-    extends: ['eslint:recommended'],
+    extends: ['prettier'],
+    plugins: ['prettier'],
     parserOptions: {
         ecmaVersion: 6,
         sourceType: 'module',
@@ -13,7 +14,12 @@ module.exports = {
         node: true
     },
     rules: {
+        "prettier/prettier": "error",
         "no-console": 0,
         "no-unused-vars": 0
+    },
+    globals: {
+        "React": true,
+        "ReactDOM": true
     }
 };
