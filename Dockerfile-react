@@ -8,4 +8,6 @@ RUN npm install -g babel-cli@6
 ADD ./widget/package.json /var/www/package.json
 RUN npm install
 
-CMD babel --watch src --out-dir build --presets react-app/prod --preset env
+RUN npm install rollup --global
+
+CMD rollup -w -c
