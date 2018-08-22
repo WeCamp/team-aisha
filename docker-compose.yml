@@ -19,6 +19,5 @@ services:
       - ./nginx/website.conf:/etc/nginx/conf.d/website.conf
       - ./nginx/public:/var/www/public
       - ./widget/build:/var/www/public/widget
-#      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     ports:
       - 8080:8080
