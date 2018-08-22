@@ -13,5 +13,5 @@ You can access the website at [http://localhost:8080](http://localhost:8080).
 If you need to install packages, you can run npm through: `docker exec -it react npm <command>`.
 
 Examples:
-* Manually running eslint: `docker exec -it react npm run eslint`. This checks the code on syntax, smells and style.
-* Manually running prettier: `docker exec -it react npm run prettier`. This automatically formats the code to an uniform style.
+* Manually running eslint: `docker-compose exec react npm run eslint`. This checks the code on syntax, smells and style.
+* Manually running prettier: `docker-compose exec react npm run prettier`. This automatically formats the code to an uniform style.
