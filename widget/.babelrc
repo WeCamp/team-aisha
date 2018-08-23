@@ -1,4 +1,0 @@
-{
-  "presets": ["react-app/prod", ["env", {"modules": false}]],
-  "plugins": ["external-helpers"]
-}

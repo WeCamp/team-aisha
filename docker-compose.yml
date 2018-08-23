@@ -4,21 +4,12 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile-react
-    user: node
+    user: root
     container_name: react
     hostname: react
     tty: true
     volumes:
       - ./widget:/var/www
       - /var/www/node_modules
-
-  website:
-    image: nginx:alpine
-    container_name: website
-    hostname: website
-    volumes:
-      - ./nginx/website.conf:/etc/nginx/conf.d/website.conf
-      - ./nginx/public:/var/www/public
-      - ./widget/build:/var/www/public/widget
     ports:
-      - 8080:8080
+      - 3000:3000
