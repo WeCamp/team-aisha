@@ -1,13 +1,9 @@
 FROM node:6-alpine
 
-RUN mkdir -p /var/www /var/www/node_modules
+RUN mkdir -p /var/www
 WORKDIR /var/www
-
-RUN npm install -g babel-cli@6
 
 ADD ./widget/package.json /var/www/package.json
 RUN npm install
 
-RUN npm install rollup --global
-
-CMD rollup -w -c
+CMD npm start
