@@ -3,6 +3,7 @@ import SlackMessageInput from "./SlackMessageInput";
 import Header from "./Header";
 import Message from "./Message";
 import Status from "./Status";
+import Users from "./Users";
 
 let availableColors = [
   "#e6194b", // Red
@@ -30,13 +31,14 @@ let availableColors = [
 ];
 
 class SlackClient extends React.Component {
+  availableColors = availableColors.sort(() => Math.random() - 0.5);
   constructor(props) {
-    availableColors = availableColors.sort(() => Math.random() - 0.5);
     super(props);
     this.state = {
       message: "",
       incomingMessages: [],
       websocket: null,
+      users: new Users(props.apiToken),
       colors: {}
     };
   }
@@ -54,15 +56,29 @@ class SlackClient extends React.Component {
         });
       }
       let message = {
-        user: data.user,
+        user: "unknown",
         text: data.text,
         timestamp: data.ts
       };
 
-      this.setState({
-        incomingMessages: [...this.state.incomingMessages, message]
-      });
+      this.state.users
+        .getUser(data.user)
+        .then(user => {
+          message.user = user.name;
+          this.addMessage(message);
+        })
+        .catch(error => {
+          console.error("failed to retrieve user for id ", data.user, error);
+          this.addMessage(message);
+        });
     }
+  }
+
+  addMessage(message) {
+    console.log("add message");
+    this.setState({
+      incomingMessages: [...this.state.incomingMessages, message]
+    });
   }
 
   sendMessage(text) {
