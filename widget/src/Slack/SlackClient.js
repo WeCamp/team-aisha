@@ -2,6 +2,7 @@ import React from "react";
 import SlackMessageInput from "./SlackMessageInput";
 import Header from "./Header";
 import Message from "./Message";
+import Status from "./Status";
 
 class SlackClient extends React.Component {
   constructor(props) {
@@ -73,6 +74,7 @@ class SlackClient extends React.Component {
       .then(body => {
         var websocket = new WebSocket(body.url);
         this.setState({ websocket: websocket });
+        websocket.onopen = e => this.forceUpdate();
         websocket.onmessage = e => this.onSlackEvent(e);
       })
       .catch(console.error);
@@ -86,6 +88,7 @@ class SlackClient extends React.Component {
   }
 
   render() {
+    const { websocket } = this.state;
     return (
       <div className="react-slack-client open">
         <Header />
@@ -94,7 +97,14 @@ class SlackClient extends React.Component {
             <Message>{message}</Message>
           ))}
         </div>
-        <SlackMessageInput sendMessage={message => this.sendMessage(message)} />
+        <SlackMessageInput
+          disabled={!(websocket && websocket.readyState === 1)}
+          sendMessage={message => this.sendMessage(message)}
+        />
+        <Status
+          connected={!!(websocket && websocket.readyState === 1)}
+          typing={""}
+        />
       </div>
     );
   }

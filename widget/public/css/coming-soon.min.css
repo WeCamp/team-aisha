@@ -230,25 +230,59 @@ video {
     padding-bottom: 0.5rem;
 }
 
+.react-slack-client .messages {
+    display: block;
+    overflow: auto;
+    padding-bottom: 0.5rem;
+}
+
 .react-slack-client .messages .message {
-    display: inline-block;
+    display: inline-flex;
     float: left;
     clear: both;
 }
 
 .react-slack-client .messages .message .avatar {
     display: inline-block;
-    padding-right: 3px;
+}
+
+.react-slack-client .messages .message.own .avatar {
+    order: 3;
+    padding-left: 0.2rem;
+}
+
+.react-slack-client .messages .message.other .avatar {
+    order: 1;
+    padding-right: 0.2rem;
 }
 
 .react-slack-client .messages .message .user {
     display: inline-block;
-    padding-right: 3px;
+    order: 2;
+}
+
+.react-slack-client .messages .message.own .user {
+    padding-left: 0.2rem;
+}
+
+.react-slack-client .messages .message.other .user {
+    padding-right: 0.2rem;
 }
 
 .react-slack-client .messages .message .body {
+    color: antiquewhite;
     display: inline-block;
     font-size: 1rem;
+}
+
+.react-slack-client .messages .message.own .body {
+    order: 1;
+    padding-left: 0.2rem;
+}
+
+.react-slack-client .messages .message.other .body {
+    order: 3;
+    padding-right: 0.2rem;
 }
 
 .react-slack-client .messages .message.own {
@@ -265,6 +299,10 @@ video {
     display: flex;
 }
 
+.react-slack-client .input textarea {
+    flex-grow: 3;
+}
+
 .react-slack-client .input .submit {
     background-color: springgreen;
     color: black;
@@ -273,4 +311,9 @@ video {
 .react-slack-client .input .submit.disabled {
     background-color: slategrey;
     color: ghostwhite;
+}
+
+.react-slack-client .status {
+    color: lightslategrey;
+    font-size: 0.85rem;
 }

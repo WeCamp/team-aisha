@@ -7,8 +7,9 @@ const filterKeyCode = (e, callback, ...params) => {
   }
 };
 
-export default ({ value, onChange, onEnter }) => (
+export default ({ value, onChange, onEnter, disabled }) => (
   <textarea
+    disabled={disabled}
     className="message-input"
     value={value}
     onChange={onChange}
