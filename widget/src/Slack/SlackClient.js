@@ -15,10 +15,10 @@ class SlackClient extends React.Component {
 
   onSlackEvent(event) {
     console.log(this);
-    var data = JSON.parse(event.data);
+    let data = JSON.parse(event.data);
     console.log(data.type);
     if (data.type === "message") {
-      var message = "[" + data.ts + "] " + data.text;
+      let message = "[" + data.ts + "] " + data.text;
       console.log(message);
       this.setState({
         incomingMessages: [...this.state.incomingMessages, message]
@@ -26,8 +26,8 @@ class SlackClient extends React.Component {
     }
   }
 
-  sendMessage(message) {
-    if (message === "") {
+  sendMessage(text) {
+    if (text === "") {
       console.error("empty message");
       return;
     }
@@ -40,26 +40,29 @@ class SlackClient extends React.Component {
     this.state.websocket.send(
       JSON.stringify({
         type: "message",
-        text: message,
-        channel: "CCBPV1E9F"
+        text: text,
+        channel: this.props.channel
       })
     );
 
+    let message = "[You] " + text;
     this.setState({
-      message: ""
-    });
-  }
-
-  changeMessage(event) {
-    this.setState({
-      message: event.target.value
+      message: "",
+      incomingMessages: [...this.state.incomingMessages, message]
     });
   }
 
   componentDidMount() {
-    console.log("mounted");
-    var initUrl =
-      "https://slack.com/api/rtm.connect?token=xoxb-3547151076-420352797363-jQbOTPcBCWuR2jaeaSKpQ883";
+    if (this.props.apiToken === undefined) {
+      console.error('No api token found');
+      return;
+    }
+
+    if (this.props.channel === undefined) {
+      console.error('No channel found');
+      return;
+    }
+    let initUrl = "https://slack.com/api/rtm.connect?token=" + this.props.apiToken;
     fetch(initUrl, {
       method: "GET",
       headers: {
@@ -71,7 +74,7 @@ class SlackClient extends React.Component {
         return response.json();
       })
       .then(body => {
-        var websocket = new WebSocket(body.url);
+        let websocket = new WebSocket(body.url);
         this.setState({ websocket: websocket });
         websocket.onmessage = e => this.onSlackEvent(e);
       })
