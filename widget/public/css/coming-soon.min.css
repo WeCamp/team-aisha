@@ -248,7 +248,7 @@ video {
 }
 
 .react-slack-client .messages .message.own .avatar {
-    order: 3;
+    order: 4;
     padding-left: 0.2rem;
 }
 
@@ -259,19 +259,29 @@ video {
 
 .react-slack-client .messages .message .user {
     display: inline-block;
-    order: 2;
 }
 
 .react-slack-client .messages .message.own .user {
     padding-left: 0.2rem;
+    order: 2;
 }
 
 .react-slack-client .messages .message.other .user {
     padding-right: 0.2rem;
+    order: 3;
+}
+
+.react-slack-client .messages .message.own .message-timestamp {
+    order: 3;
+    padding-left: 0.2rem;
+}
+
+.react-slack-client .messages .message.other .message-timestamp {
+    order: 2;
+    padding-right: 0.2rem;
 }
 
 .react-slack-client .messages .message .body {
-    color: antiquewhite;
     display: inline-block;
     font-size: 1rem;
     word-wrap: break-word;
@@ -284,7 +294,7 @@ video {
 }
 
 .react-slack-client .messages .message.other .body {
-    order: 3;
+    order: 4;
     padding-right: 0.2rem;
 }
 

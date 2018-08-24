@@ -4,13 +4,40 @@ import Header from "./Header";
 import Message from "./Message";
 import Status from "./Status";
 
+let availableColors = [
+  "#e6194b", // Red
+  "#3cb44b", // Green
+  "#ffe119", // Yellow
+  "#0082c8", // Blue
+  "#f58231", // Orange
+  "#911eb4", // Purple
+  "#46f0f0", // Cyan
+  "#f032e6", // Magenta
+  "#d2f53c", // Lime
+  "#fabebe", // Pink
+  "#008080", // Teal
+  "#e6beff", // Lavender
+  "#aa6e28", // Brown
+  "#fffac8", // Beige
+  "#800000", // Maroon
+  "#aaffc3", // Mint
+  "#808000", // Olive
+  "#ffd8b1", // Coral
+  "#000080", // Navy
+  "#808080", // Grey
+  "#FFFFFF", // White
+  "#000000" // Black
+];
+
 class SlackClient extends React.Component {
   constructor(props) {
+    availableColors = availableColors.sort(() => Math.random() - 0.5);
     super(props);
     this.state = {
       message: "",
       incomingMessages: [],
-      websocket: null
+      websocket: null,
+      colors: {}
     };
   }
 
@@ -18,6 +45,14 @@ class SlackClient extends React.Component {
     let data = JSON.parse(event.data);
     console.log(data);
     if (data.type === "message") {
+      if (!this.state.colors[data.user]) {
+        this.setState({
+          colors: {
+            ...this.state.colors,
+            [data.user]: availableColors.pop() || "limegreen"
+          }
+        });
+      }
       let message = {
         user: data.user,
         text: data.text,
@@ -100,25 +135,28 @@ class SlackClient extends React.Component {
   }
 
   render() {
-    const { websocket } = this.state;
+    const { websocket } = this.state,
+      connected = websocket && websocket.readyState === 1;
     return (
       <div className="react-slack-client open">
         <Header />
         <div className="messages">
           {this.state.incomingMessages.map(message => (
-            <Message user={message.user} timestamp={message.timestamp}>
+            <Message
+              key={message.timestamp}
+              user={message.user}
+              timestamp={message.timestamp}
+              color={this.state.colors[message.user]}
+            >
               {message.text}
             </Message>
           ))}
         </div>
         <SlackMessageInput
-          disabled={!(websocket && websocket.readyState === 1)}
+          disabled={!connected}
           sendMessage={message => this.sendMessage(message)}
         />
-        <Status
-          connected={!!(websocket && websocket.readyState === 1)}
-          typing={""}
-        />
+        <Status connected={!!connected} typing={""} />
       </div>
     );
   }
