@@ -4,11 +4,11 @@ import User from "./User";
 import Body from "./Body";
 import Timestamp from "./Timestamp";
 
-export default ({ timestamp, children }) => (
+export default ({ user, timestamp, children }) => (
   <div className="message own">
     <Avatar />
-    <User />
     <Timestamp timestamp={timestamp} />
+    <User user={user} />
     <Body>{children}</Body>
   </div>
 );
