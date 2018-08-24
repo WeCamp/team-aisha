@@ -8,7 +8,7 @@ class SlackClient extends React.Component {
     super(props);
     this.state = {
       message: "",
-      incomingMessages: [""],
+      incomingMessages: [],
       websocket: null
     };
   }
