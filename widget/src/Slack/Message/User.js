@@ -1,3 +1,3 @@
 import React from "react";
 
-export default () => <div className="user">Ian</div>;
+export default props => <div className="user">{props.user}</div>;

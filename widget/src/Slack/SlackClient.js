@@ -1,6 +1,5 @@
 import React from "react";
 import SlackMessageInput from "./SlackMessageInput";
-import dateformat from "dateformat";
 import Header from "./Header";
 import Message from "./Message";
 import Status from "./Status";
@@ -16,16 +15,15 @@ class SlackClient extends React.Component {
   }
 
   onSlackEvent(event) {
-    console.log(this);
     let data = JSON.parse(event.data);
-    console.log(data.type);
+    console.log(data);
     if (data.type === "message") {
-      let time = dateformat(
-        Math.floor(data.ts * 1000),
-        "dddd, mmmm dS, yyyy, h:MM:ss TT"
-      );
-      let message = "[" + time + "] " + data.text;
-      console.log(message);
+      let message = {
+        user: data.user,
+        text: data.text,
+        timestamp: data.ts
+      };
+
       this.setState({
         incomingMessages: [...this.state.incomingMessages, message]
       });
@@ -51,7 +49,12 @@ class SlackClient extends React.Component {
       })
     );
 
-    let message = "[You] " + text;
+    let timestamp = new Date().getTime() / 1000;
+    const message = {
+      user: "You",
+      text: text,
+      timestamp: timestamp
+    };
     this.setState({
       message: "",
       incomingMessages: [...this.state.incomingMessages, message]
@@ -103,7 +106,9 @@ class SlackClient extends React.Component {
         <Header />
         <div className="messages">
           {this.state.incomingMessages.map(message => (
-            <Message>{message}</Message>
+            <Message user={message.user} timestamp={message.timestamp}>
+              {message.text}
+            </Message>
           ))}
         </div>
         <SlackMessageInput
