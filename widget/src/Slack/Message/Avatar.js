@@ -1,11 +1,11 @@
 import React from "react";
 
-export default () => (
+export default ({ user }) => (
   <img
-    src="https://api.adorable.io/avatars/10/ian.png"
+    src={`https://api.adorable.io/avatars/10/${user}.png`}
     height="20"
     width="20"
     className="avatar"
-    alt="ian"
+    alt={user}
   />
 );
