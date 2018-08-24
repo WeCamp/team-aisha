@@ -56,7 +56,10 @@ class SlackClient extends React.Component {
         });
       }
       let message = {
-        user: "unknown",
+        user: {
+          username: "unknown",
+          avatar: "https://api.adorable.io/avatars/10/123456.png"
+        },
         text: data.text,
         timestamp: data.ts
       };
@@ -64,7 +67,8 @@ class SlackClient extends React.Component {
       this.state.users
         .getUser(data.user)
         .then(user => {
-          message.user = user.name;
+          message.user.username = user.name;
+          message.user.avatar = user.profile.image_48;
           this.addMessage(message);
         })
         .catch(error => {
@@ -75,7 +79,7 @@ class SlackClient extends React.Component {
   }
 
   addMessage(message) {
-    console.log("add message");
+    console.log("add message", message);
     this.setState({
       incomingMessages: [...this.state.incomingMessages, message]
     });
@@ -102,14 +106,14 @@ class SlackClient extends React.Component {
 
     let timestamp = new Date().getTime() / 1000;
     const message = {
-      user: "You",
+      user: {
+        username: "You",
+        avatar: "https://api.adorable.io/avatars/10/1234.png"
+      },
       text: text,
       timestamp: timestamp
     };
-    this.setState({
-      message: "",
-      incomingMessages: [...this.state.incomingMessages, message]
-    });
+    this.addMessage(message);
   }
 
   componentDidMount() {
