@@ -14,17 +14,17 @@ const contraColorMap = {
   "#46f0f0": "black", // Cyan
   "#f032e6": "white", // Magenta
   "#d2f53c": "black", // Lime
-  "#fabebe": "white", // Pink
+  "#fabebe": "black", // Pink
   "#008080": "white", // Teal
   "#e6beff": "black", // Lavender
   "#aa6e28": "white", // Brown
-  "#fffac8": "white", // Beige
-  "#800000": "black", // Maroon
+  "#fffac8": "black", // Beige
+  "#800000": "white", // Maroon
   "#aaffc3": "black", // Mint
   "#808000": "white", // Olive
   "#ffd8b1": "black", // Coral
   "#000080": "white", // Navy
-  "#808080": "black", // Grey
+  "#808080": "white", // Grey
   "#FFFFFF": "black", // White
   "#000000": "white" // Black
 };
