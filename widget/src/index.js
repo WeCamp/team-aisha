@@ -4,12 +4,23 @@ class SlackClient extends React.Component {
     super(props)
     this.state = {
       message: '',
+      incomingMessages: [''],
       websocket: null
     }
   }
 
   onSlackEvent(event) {
-    console.log('a slack event happened!', JSON.parse(event.data));
+    console.log(this)
+    var data = JSON.parse(event.data);
+    console.log(data.type)
+    if (data.type === 'message') {
+      var message = "[" + data.ts + "] " + data.text;
+      console.log(message)
+      this.setState({
+        incomingMessages: [... this.state.incomingMessages, message]
+      })
+    }
+
   }
 
   sendMessage() {
@@ -28,6 +39,10 @@ class SlackClient extends React.Component {
       "text":this.state.message,
       "channel":"CCBPV1E9F"}
     ));
+
+    this.setState({
+      message: ''
+    })
   }
 
   changeMessage(event) {
@@ -50,7 +65,7 @@ class SlackClient extends React.Component {
     }).then(body => {
       var websocket = new WebSocket(body.url)
       this.setState({websocket: websocket})
-      websocket.onmessage = this.onSlackEvent
+      websocket.onmessage = (e => this.onSlackEvent(e))
     }).catch(console.error)
   }
 
@@ -62,10 +77,16 @@ class SlackClient extends React.Component {
   }
 
   render() {
+    console.log('state', this.state)
     return (
       <div>
-      <textarea onChange={e => this.changeMessage(e)}></textarea>
-      <button onClick={e => this.sendMessage()}>Post</button>
+        <div>
+          <textarea style={{height: 300, width: 200}} value={this.state.incomingMessages.join("\n")}></textarea>
+        </div>
+        <div>
+          <textarea style={{height: 200, width: 200}} onChange={e => this.changeMessage(e)} value={this.state.message}></textarea>
+          <button onClick={e => this.sendMessage()}>Post</button>
+        </div>
       </div>
     );
   }
