@@ -13,3 +13,13 @@ services:
       - /var/www/node_modules
     ports:
       - 3000:3000
+
+  website:
+    image: nginx:alpine
+    container_name: website
+    hostname: website
+    volumes:
+      - ./nginx/website.conf:/etc/nginx/conf.d/website.conf
+      - ./widget/build:/var/www/public
+    ports:
+      - 8080:8080
