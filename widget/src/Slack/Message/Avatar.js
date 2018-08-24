@@ -6,5 +6,6 @@ export default () => (
     height="20"
     width="20"
     className="avatar"
+    alt="ian"
   />
 );
