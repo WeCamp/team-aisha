@@ -1,6 +1,6 @@
 import React from "react";
 import SlackMessageInput from "./SlackMessageInput";
-import dateformat from "dateformat"
+import dateformat from "dateformat";
 import Header from "./Header";
 import Message from "./Message";
 import Status from "./Status";
@@ -20,7 +20,10 @@ class SlackClient extends React.Component {
     let data = JSON.parse(event.data);
     console.log(data.type);
     if (data.type === "message") {
-      let time = dateformat(Math.floor(data.ts * 1000), "dddd, mmmm dS, yyyy, h:MM:ss TT");
+      let time = dateformat(
+        Math.floor(data.ts * 1000),
+        "dddd, mmmm dS, yyyy, h:MM:ss TT"
+      );
       let message = "[" + time + "] " + data.text;
       console.log(message);
       this.setState({
@@ -57,15 +60,16 @@ class SlackClient extends React.Component {
 
   componentDidMount() {
     if (this.props.apiToken === undefined) {
-      console.error('No api token found');
+      console.error("No api token found");
       return;
     }
 
     if (this.props.channel === undefined) {
-      console.error('No channel found');
+      console.error("No channel found");
       return;
     }
-    let initUrl = "https://slack.com/api/rtm.connect?token=" + this.props.apiToken;
+    let initUrl =
+      "https://slack.com/api/rtm.connect?token=" + this.props.apiToken;
     fetch(initUrl, {
       method: "GET",
       headers: {

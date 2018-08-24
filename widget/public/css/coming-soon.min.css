@@ -240,6 +240,7 @@ video {
     display: inline-flex;
     float: left;
     clear: both;
+    margin-bottom: 0.1rem;
 }
 
 .react-slack-client .messages .message .avatar {
@@ -273,6 +274,8 @@ video {
     color: antiquewhite;
     display: inline-block;
     font-size: 1rem;
+    word-wrap: break-word;
+    max-width: 25rem;
 }
 
 .react-slack-client .messages .message.own .body {
@@ -293,6 +296,7 @@ video {
 
 .react-slack-client .messages .message.other {
     background-color: limegreen;
+    margin-right: 1rem;
 }
 
 .react-slack-client .input {
