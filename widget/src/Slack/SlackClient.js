@@ -103,7 +103,7 @@ class SlackClient extends React.Component {
         <Header />
         <div className="messages">
           {this.state.incomingMessages.map(message => (
-            <Message>{message}</Message>
+            <Message timestamp={message.timestamp}>{message.text}</Message>
           ))}
         </div>
         <SlackMessageInput
