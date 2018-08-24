@@ -25,12 +25,13 @@ class SlackMessageInput extends React.Component {
     return (
       <div className="input">
         <Textarea
+          disabled={this.props.disabled}
           value={this.state.message}
           onEnter={e => this.sendMessage()}
           onChange={e => this.changeMessage(e)}
         />
         <Submit
-          disabled={this.state.message.length < 1}
+          disabled={this.props.disabled || this.state.message.length < 1}
           onClick={e => this.sendMessage()}
         >
           Send

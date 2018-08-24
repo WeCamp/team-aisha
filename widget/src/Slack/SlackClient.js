@@ -1,15 +1,16 @@
 import React from "react";
 import SlackMessageInput from "./SlackMessageInput";
-import dateformat from "dateformat"
+import dateformat from "dateformat";
 import Header from "./Header";
 import Message from "./Message";
+import Status from "./Status";
 
 class SlackClient extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       message: "",
-      incomingMessages: [""],
+      incomingMessages: [],
       websocket: null
     };
   }
@@ -19,7 +20,10 @@ class SlackClient extends React.Component {
     let data = JSON.parse(event.data);
     console.log(data.type);
     if (data.type === "message") {
-      let time = dateformat(Math.floor(data.ts * 1000), "dddd, mmmm dS, yyyy, h:MM:ss TT");
+      let time = dateformat(
+        Math.floor(data.ts * 1000),
+        "dddd, mmmm dS, yyyy, h:MM:ss TT"
+      );
       let message = "[" + time + "] " + data.text;
       console.log(message);
       this.setState({
@@ -56,15 +60,16 @@ class SlackClient extends React.Component {
 
   componentDidMount() {
     if (this.props.apiToken === undefined) {
-      console.error('No api token found');
+      console.error("No api token found");
       return;
     }
 
     if (this.props.channel === undefined) {
-      console.error('No channel found');
+      console.error("No channel found");
       return;
     }
-    let initUrl = "https://slack.com/api/rtm.connect?token=" + this.props.apiToken;
+    let initUrl =
+      "https://slack.com/api/rtm.connect?token=" + this.props.apiToken;
     fetch(initUrl, {
       method: "GET",
       headers: {
@@ -78,6 +83,7 @@ class SlackClient extends React.Component {
       .then(body => {
         let websocket = new WebSocket(body.url);
         this.setState({ websocket: websocket });
+        websocket.onopen = e => this.forceUpdate();
         websocket.onmessage = e => this.onSlackEvent(e);
       })
       .catch(console.error);
@@ -91,6 +97,7 @@ class SlackClient extends React.Component {
   }
 
   render() {
+    const { websocket } = this.state;
     return (
       <div className="react-slack-client open">
         <Header />
@@ -99,7 +106,14 @@ class SlackClient extends React.Component {
             <Message>{message}</Message>
           ))}
         </div>
-        <SlackMessageInput sendMessage={message => this.sendMessage(message)} />
+        <SlackMessageInput
+          disabled={!(websocket && websocket.readyState === 1)}
+          sendMessage={message => this.sendMessage(message)}
+        />
+        <Status
+          connected={!!(websocket && websocket.readyState === 1)}
+          typing={""}
+        />
       </div>
     );
   }
