@@ -1,31 +1,24 @@
 {
-  "name": "www",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "prettier": "prettier --write \"src/**/*.js\"",
-    "eslint": "eslint src"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "resolutions": {
-    "react": "16.4.0",
-    "react-dom": "16.4.0"
-  },
+  "name": "reactor",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
-    "react-slack-chat": "^1.10.2",
-    "babel-node-modules": "0.0.1",
-    "babel-plugin-external-helpers": "^6.22.0",
+	"ajv": "^6.5.3",
     "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react-app": "^3.1.2",
-    "rollup": "^0.64.1",
-    "rollup-plugin-babel": "^3.0.7",
-    "rollup-plugin-commonjs": "^9.1.5",
-    "rollup-plugin-node-resolve": "^3.3.0",
-    "rollup-plugin-replace": "^2.0.0"
+    "browserslist": "^4.1.0",
+    "eslint": "^4.1.1",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
+    "react-scripts": "1.1.5",
+    "react-slack-chat": "^1.10.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "eslint": "eslint \"src/**/*.js\"",
+    "prettier": "prettier --write \"src/**/*.js\""
   },
   "devDependencies": {
     "eslint": "^5.4.0",
