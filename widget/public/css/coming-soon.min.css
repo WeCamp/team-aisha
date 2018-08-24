@@ -8,6 +8,64 @@ html{height:100%}h1,h2,h3,h4,h5,h6{font-family:Merriweather;font-weight:700}body
     font-size: 1.5rem;
 }
 
-.react-slack-chat>div>div>div {
+.react-slack-client {
     z-index: 2;
+    position: absolute;
+    bottom: 2%;
+    right: 5%;
+    background-color: whitesmoke;
+    border-radius: 10%;
+    align-content: center;
+    text-align: center;
+    padding: 1% 1%;
+}
+
+.react-slack-client .header {
+    background-color: dodgerblue;
+    padding-bottom: 0.5rem;
+}
+
+.react-slack-client .messages .message {
+    display: inline-block;
+    float: left;
+    clear: both;
+}
+
+.react-slack-client .messages .message .avatar {
+    display: inline-block;
+    padding-right: 3px;
+}
+
+.react-slack-client .messages .message .user {
+    display: inline-block;
+    padding-right: 3px;
+}
+
+.react-slack-client .messages .message .body {
+    display: inline-block;
+    font-size: 1rem;
+}
+
+.react-slack-client .messages .message.own {
+    float: right;
+    clear: both;
+    background-color: forestgreen;
+}
+
+.react-slack-client .messages .message.other {
+    background-color: limegreen;
+}
+
+.react-slack-client .input textarea {
+
+}
+
+.react-slack-client .input .submit {
+    background-color: springgreen;
+    color: black;
+}
+
+.react-slack-client .input .submit.disabled {
+    background-color: slategrey;
+    color: ghostwhite;
 }
