@@ -31,8 +31,8 @@ let availableColors = [
 ];
 
 class SlackClient extends React.Component {
-  availableColors = availableColors.sort(() => Math.random() - 0.5);
   constructor(props) {
+    availableColors = availableColors.sort(() => Math.random() - 0.5);
     super(props);
     this.state = {
       message: "",
