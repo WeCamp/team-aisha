@@ -121,6 +121,7 @@ class SlackClient extends React.Component {
     }
 
     if (this.state.websocket === null) {
+      this.setState({ slackStatus: "Not connected to Slack. Rate limited?" });
       console.error("no open websocket");
       return;
     }
