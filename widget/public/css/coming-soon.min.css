@@ -242,6 +242,10 @@ video {
     display: none; !important;
 }
 
+.react-slack-client .badge {
+    height: 1.5rem;
+}
+
 .react-slack-client .messages {
     display: block;
     overflow: auto;
