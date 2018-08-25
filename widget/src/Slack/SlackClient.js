@@ -51,14 +51,6 @@ class SlackClient extends React.Component {
     let data = JSON.parse(event.data);
     console.log(data);
     if (data.type === "message") {
-      if (!this.state.colors[data.user]) {
-        this.setState({
-          colors: {
-            ...this.state.colors,
-            [data.user]: availableColors.pop() || "limegreen"
-          }
-        });
-      }
       let message = {
         user: {
           username: "unknown",
@@ -71,13 +63,21 @@ class SlackClient extends React.Component {
       this.state.users
         .getUser(data.user)
         .then(user => {
+          const updatedState = {};
           message.user.username = user.name;
           message.user.avatar = user.profile.image_48;
           if (this.state.open === false) {
-            this.setState({
-              unread: this.state.unread + 1
-            });
+            updatedState.unread = this.state.unread + 1;
           }
+          if (!this.state.colors[user.name]) {
+            updatedState.colors = {
+              ...this.state.colors,
+              [user.name]: availableColors.pop() || "limegreen"
+            };
+          }
+
+          this.setState(updatedState);
+
           this.addMessage(message);
         })
         .catch(error => {
@@ -245,7 +245,7 @@ class SlackClient extends React.Component {
                 key={message.timestamp}
                 user={message.user}
                 timestamp={message.timestamp}
-                color={this.state.colors[message.user]}
+                color={this.state.colors[message.user.username]}
               >
                 {message.text}
               </Message>
