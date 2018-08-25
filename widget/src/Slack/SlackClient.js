@@ -60,6 +60,13 @@ class SlackClient extends React.Component {
         timestamp: data.ts
       };
 
+      // console.log(message.text);
+
+      // cat
+      if(message.text === '!cat' ){
+        this.sendMessage(':smile_cat:');
+      }
+
       this.state.users
         .getUser(data.user)
         .then(user => {
