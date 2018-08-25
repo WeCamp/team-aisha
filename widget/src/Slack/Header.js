@@ -1,6 +1,6 @@
 import React from "react";
 
-export default ({ onClick, open }) => (
+export default ({ onClick, open, unread }) => (
   <div className="header-row">
     {open && (
       <div onClick={onClick}>
@@ -10,5 +10,6 @@ export default ({ onClick, open }) => (
     <h1 onClick={onClick} className="header">
       Slack client
     </h1>
+    {!open && unread > 0 && <div className="badge badge-danger">{unread}</div>}
   </div>
 );
