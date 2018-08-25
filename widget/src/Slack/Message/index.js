@@ -29,7 +29,7 @@ const contraColorMap = {
   "#000000": "white" // Black
 };
 
-export default ({ user = {}, timestamp, children, color }) => (
+export default ({ user = {}, timestamp, text, color }) => (
   <div
     className={`message ${user.username !== "You" ? "other" : "own"}`}
     style={color && { backgroundColor: color, color: contraColorMap[color] }}
@@ -37,6 +37,6 @@ export default ({ user = {}, timestamp, children, color }) => (
     <Avatar user={user} />
     <Timestamp timestamp={timestamp} />
     <User user={user} />
-    <Body>{children}</Body>
+    <Body text={text} />
   </div>
 );
