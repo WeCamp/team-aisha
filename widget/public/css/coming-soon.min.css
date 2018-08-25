@@ -226,8 +226,20 @@ video {
 }
 
 .react-slack-client .header {
-    background-color: dodgerblue;
     padding-bottom: 0.5rem;
+}
+
+.react-slack-client .header-row {
+    background-color: dodgerblue;
+    display: inline-flex;
+}
+
+.react-slack-client .header-row .fa {
+    padding-top: 1rem;
+}
+
+.react-slack-client .hide {
+    display: none; !important;
 }
 
 .react-slack-client .messages {
