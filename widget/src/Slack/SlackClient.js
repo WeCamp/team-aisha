@@ -40,7 +40,8 @@ class SlackClient extends React.Component {
       incomingMessages: [],
       websocket: null,
       users: new Users(props.apiToken),
-      colors: {}
+      colors: {},
+      unread: 0
     };
   }
 
@@ -70,6 +71,11 @@ class SlackClient extends React.Component {
         .then(user => {
           message.user.username = user.name;
           message.user.avatar = user.profile.image_48;
+          if (this.state.open === false) {
+            this.setState({
+              unread: this.state.unread + 1
+            });
+          }
           this.addMessage(message);
         })
         .catch(error => {
@@ -119,7 +125,8 @@ class SlackClient extends React.Component {
 
   togglePopup() {
     this.setState({
-      open: !this.state.open
+      open: !this.state.open,
+      unread: 0
     });
   }
 
@@ -162,11 +169,11 @@ class SlackClient extends React.Component {
   }
 
   render() {
-    const { websocket, open } = this.state,
+    const { websocket, open, unread } = this.state,
       connected = websocket && websocket.readyState === 1;
     return (
       <div className="react-slack-client open">
-        <Header onClick={e => this.togglePopup()} open={open} />
+        <Header onClick={e => this.togglePopup()} open={open} unread={unread} />
         <div className={open ? "show" : "hide"}>
           <div className="messages">
             {this.state.incomingMessages.map(message => (
