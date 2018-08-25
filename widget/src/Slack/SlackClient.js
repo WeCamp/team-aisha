@@ -36,13 +36,13 @@ class SlackClient extends React.Component {
     availableColors = availableColors.sort(() => Math.random() - 0.5);
     super(props);
     this.webApi = new WebApi(props.apiToken);
+    this.users = new Users(this.webApi)
     this.state = {
       open: false,
       message: "",
       slackStatus: "",
       incomingMessages: [],
       websocket: null,
-      users: new Users(this.webApi),
       colors: {},
       connectionTimeout: 5000,
       unread: 0
@@ -70,7 +70,7 @@ class SlackClient extends React.Component {
         timestamp: data.ts
       };
 
-      this.state.users
+      this.users
         .getUser(data.user)
         .then(user => {
           message.user.username = user.name;
@@ -88,7 +88,7 @@ class SlackClient extends React.Component {
         });
     }
     if (data.type === "user_typing") {
-      this.state.users.getUser(data.user).then(user =>
+      this.users.getUser(data.user).then(user =>
         this.setState({
           slackStatus: `User ${user.name} is typing`
         })
