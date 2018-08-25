@@ -4,6 +4,7 @@ import Header from "./Header";
 import Message from "./Message";
 import Status from "./Status";
 import Users from "./Users";
+import WebApi from "./Client/WebApi";
 
 let availableColors = [
   "#e6194b", // Red
@@ -34,12 +35,13 @@ class SlackClient extends React.Component {
   constructor(props) {
     availableColors = availableColors.sort(() => Math.random() - 0.5);
     super(props);
+    this.webApi = new WebApi(props.apiToken);
     this.state = {
       open: false,
       message: "",
       incomingMessages: [],
       websocket: null,
-      users: new Users(props.apiToken),
+      users: new Users(this.webApi),
       colors: {}
     };
   }

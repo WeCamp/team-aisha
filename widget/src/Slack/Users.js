@@ -1,6 +1,6 @@
 export default class Users {
-  constructor(apiToken) {
-    this.apiToken = apiToken;
+  constructor(webApi) {
+    this.webApi = webApi;
     this.users = {};
   }
 
@@ -16,21 +16,9 @@ export default class Users {
     if (this.hasUser(userId) === true) {
       return Promise.resolve(this.users[userId]);
     }
-    let initUrl =
-      "https://slack.com/api/users.info?token=" +
-      this.apiToken +
-      "&user=" +
-      userId;
-    return fetch(initUrl, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      credentials: "same-origin"
-    })
-      .then(function(response) {
-        return response.json();
-      })
+
+    return this.webApi
+      .getUserInfo(userId)
       .then(body => {
         console.log("Retrieved", body);
         this.addUser(userId, body.user);
