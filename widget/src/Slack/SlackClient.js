@@ -35,6 +35,7 @@ class SlackClient extends React.Component {
     availableColors = availableColors.sort(() => Math.random() - 0.5);
     super(props);
     this.state = {
+      open: false,
       message: "",
       incomingMessages: [],
       websocket: null,
@@ -116,6 +117,12 @@ class SlackClient extends React.Component {
     this.addMessage(message);
   }
 
+  togglePopup() {
+    this.setState({
+      open: !this.state.open
+    });
+  }
+
   componentDidMount() {
     if (this.props.apiToken === undefined) {
       console.error("No api token found");
@@ -155,28 +162,30 @@ class SlackClient extends React.Component {
   }
 
   render() {
-    const { websocket } = this.state,
+    const { websocket, open } = this.state,
       connected = websocket && websocket.readyState === 1;
     return (
       <div className="react-slack-client open">
-        <Header />
-        <div className="messages">
-          {this.state.incomingMessages.map(message => (
-            <Message
-              key={message.timestamp}
-              user={message.user}
-              timestamp={message.timestamp}
-              color={this.state.colors[message.user]}
-            >
-              {message.text}
-            </Message>
-          ))}
+        <Header onClick={e => this.togglePopup()} open={open} />
+        <div className={open ? "show" : "hide"}>
+          <div className="messages">
+            {this.state.incomingMessages.map(message => (
+              <Message
+                key={message.timestamp}
+                user={message.user}
+                timestamp={message.timestamp}
+                color={this.state.colors[message.user]}
+              >
+                {message.text}
+              </Message>
+            ))}
+          </div>
+          <SlackMessageInput
+            disabled={!connected}
+            sendMessage={message => this.sendMessage(message)}
+          />
+          <Status connected={!!connected} typing={""} />
         </div>
-        <SlackMessageInput
-          disabled={!connected}
-          sendMessage={message => this.sendMessage(message)}
-        />
-        <Status connected={!!connected} typing={""} />
       </div>
     );
   }
