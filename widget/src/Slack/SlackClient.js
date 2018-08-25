@@ -253,8 +253,9 @@ class SlackClient extends React.Component {
                 user={message.user}
                 timestamp={message.timestamp}
                 color={this.state.colors[message.user.username]}
+                text={message.text}
               >
-                {message.text}
+
               </Message>
             ))}
           </div>

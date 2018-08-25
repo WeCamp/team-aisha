@@ -1,3 +1,4 @@
 import React from "react";
+import Emoji from 'react-emoji-render';
 
-export default ({ children }) => <div className="body">{children}</div>;
+export default ({text}) => <div className="body"><Emoji text={text} /></div>;
