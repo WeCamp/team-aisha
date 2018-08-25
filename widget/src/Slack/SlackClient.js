@@ -2,7 +2,7 @@ import React from "react";
 import SlackMessageInput from "./SlackMessageInput";
 import Header from "./Header";
 import Message from "./Message";
-import Status from "./Status";
+import SlackStatus from "./SlackStatus";
 import Users from "./Users";
 
 let availableColors = [
@@ -37,10 +37,12 @@ class SlackClient extends React.Component {
     this.state = {
       open: false,
       message: "",
+      slackStatus: "",
       incomingMessages: [],
       websocket: null,
       users: new Users(props.apiToken),
       colors: {},
+      connectionTimeout: 5000,
       unread: 0
     };
   }
@@ -83,6 +85,24 @@ class SlackClient extends React.Component {
           this.addMessage(message);
         });
     }
+    if (data.type === "user_typing") {
+      this.state.users.getUser(data.user).then(user =>
+        this.setState({
+          slackStatus: `User ${user.name} is typing`
+        })
+      );
+
+      // clear the timer that is already set
+      console.log("clearing existing timer");
+      clearTimeout(this.statusClearer);
+
+      console.log("setting new timer");
+      // it's not time yet, so wait a bit and try again
+      this.statusClearer = setTimeout(e => {
+        // console.log('it should clear the status now');
+        this.slackStatusClear();
+      }, 6000);
+    }
   }
 
   addMessage(message) {
@@ -99,6 +119,7 @@ class SlackClient extends React.Component {
     }
 
     if (this.state.websocket === null) {
+      this.setState({ slackStatus: "Not connected to Slack. Rate limited?" });
       console.error("no open websocket");
       return;
     }
@@ -130,7 +151,8 @@ class SlackClient extends React.Component {
     });
   }
 
-  componentDidMount() {
+  connectToSlack() {
+    this.setState({ slackStatus: "Connection to slack..." });
     if (this.props.apiToken === undefined) {
       console.error("No api token found");
       return;
@@ -140,6 +162,7 @@ class SlackClient extends React.Component {
       console.error("No channel found");
       return;
     }
+
     let initUrl =
       "https://slack.com/api/rtm.connect?token=" + this.props.apiToken;
     fetch(initUrl, {
@@ -149,10 +172,41 @@ class SlackClient extends React.Component {
       },
       credentials: "same-origin"
     })
-      .then(function(response) {
+      .then(response => {
+        if (response.ok === false) {
+          if (response.status === 429) {
+            this.setState({ slackStatus: "Rate limited! Stop sending!" });
+          } else {
+            this.setState({ slackStatus: "Error during connecting to Slack" });
+          }
+
+          // console.log('Will try again in ' + (this.state.connectionTimeout / 1000) + ' seconds');
+          //
+          // // try again in n secs
+          // setTimeout(
+          //     e => {
+          //         console.log('reconnecing after failed attempt');
+          //         // this.connectToSlack()
+          //     },
+          //     this.connectionTimeout
+          // );
+          //
+          // // increase the connectionTimout for the next run
+          // let increasedTimeout = this.state.connectionTimeout * 2;
+          // this.setState({connectionTimeout: increasedTimeout});
+        } else {
+          this.setState({ slackStatus: "Successfully connected" });
+        }
         return response.json();
       })
       .then(body => {
+        if (body.ok === false) {
+          this.setState({
+            slackStatus: "Connection failed! Message: " + body.error
+          });
+          console.error("Connection to Slack failed! Message: " + body.error);
+        }
+
         let websocket = new WebSocket(body.url);
         this.setState({ websocket: websocket });
         websocket.onopen = e => this.forceUpdate();
@@ -161,11 +215,21 @@ class SlackClient extends React.Component {
       .catch(console.error);
   }
 
+  componentDidMount() {
+    this.connectToSlack();
+  }
+
   componentWillUnmount() {
     if (this.state.websocket !== null) {
+      this.setStatus({ slackStatus: "closing connection" });
       console.log("close connection");
       this.state.websocket.close();
     }
+  }
+
+  slackStatusClear() {
+    console.log("resetting");
+    this.setState({ slackStatus: "" });
   }
 
   render() {
@@ -191,7 +255,10 @@ class SlackClient extends React.Component {
             disabled={!connected}
             sendMessage={message => this.sendMessage(message)}
           />
-          <Status connected={!!connected} typing={""} />
+          <SlackStatus
+            status={this.state.slackStatus}
+            clearStatus={e => this.slackStatusClear()}
+          />
         </div>
       </div>
     );
