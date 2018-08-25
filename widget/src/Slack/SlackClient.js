@@ -3,6 +3,7 @@ import SlackMessageInput from "./SlackMessageInput";
 import Header from "./Header";
 import Message from "./Message";
 import Status from "./Status";
+import Users from "./Users";
 
 let availableColors = [
   "#e6194b", // Red
@@ -37,6 +38,7 @@ class SlackClient extends React.Component {
       message: "",
       incomingMessages: [],
       websocket: null,
+      users: new Users(props.apiToken),
       colors: {}
     };
   }
@@ -54,15 +56,33 @@ class SlackClient extends React.Component {
         });
       }
       let message = {
-        user: data.user,
+        user: {
+          username: "unknown",
+          avatar: "https://api.adorable.io/avatars/10/123456.png"
+        },
         text: data.text,
         timestamp: data.ts
       };
 
-      this.setState({
-        incomingMessages: [...this.state.incomingMessages, message]
-      });
+      this.state.users
+        .getUser(data.user)
+        .then(user => {
+          message.user.username = user.name;
+          message.user.avatar = user.profile.image_48;
+          this.addMessage(message);
+        })
+        .catch(error => {
+          console.error("failed to retrieve user for id ", data.user, error);
+          this.addMessage(message);
+        });
     }
+  }
+
+  addMessage(message) {
+    console.log("add message", message);
+    this.setState({
+      incomingMessages: [...this.state.incomingMessages, message]
+    });
   }
 
   sendMessage(text) {
@@ -86,14 +106,14 @@ class SlackClient extends React.Component {
 
     let timestamp = new Date().getTime() / 1000;
     const message = {
-      user: "You",
+      user: {
+        username: "You",
+        avatar: "https://api.adorable.io/avatars/10/1234.png"
+      },
       text: text,
       timestamp: timestamp
     };
-    this.setState({
-      message: "",
-      incomingMessages: [...this.state.incomingMessages, message]
-    });
+    this.addMessage(message);
   }
 
   componentDidMount() {
