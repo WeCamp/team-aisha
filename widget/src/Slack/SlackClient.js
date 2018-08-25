@@ -36,7 +36,7 @@ class SlackClient extends React.Component {
     availableColors = availableColors.sort(() => Math.random() - 0.5);
     super(props);
     this.webApi = new WebApi(props.apiToken);
-    this.users = new Users(this.webApi)
+    this.users = new Users(this.webApi);
     this.state = {
       open: false,
       message: "",
